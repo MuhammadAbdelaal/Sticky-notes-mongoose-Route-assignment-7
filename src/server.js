@@ -9,7 +9,9 @@ app.use(express.json()); // parse req body
 // global error handler
 app.use((err, req, res, next) => {
   console.log(err.message);
-  res.status(500).send(err.message);
+  res
+    .status(err.statusCode || 500)
+    .json({ message: err.message, success: false });
 });
 
 app.listen(PORT, () => {
