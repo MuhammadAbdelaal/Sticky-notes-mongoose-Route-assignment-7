@@ -1,10 +1,13 @@
 import express from "express";
 import "./common/db/connection.js";
+import { userRouter } from "./app/users/user.route.js";
 
 const app = express();
 const PORT = 3000;
 
 app.use(express.json()); // parse req body
+
+app.use("/users", userRouter); // user routes
 
 // global error handler
 app.use((err, req, res, next) => {
