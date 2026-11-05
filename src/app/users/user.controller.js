@@ -13,7 +13,7 @@ export const signup = async (req, res, next) => {
       throw error;
     }
 
-   await userService.signup({
+    await userService.signup({
       name,
       email,
       password,
@@ -88,7 +88,27 @@ export const deleteUser = async (req, res, next) => {
       throw error;
     }
     await userService.deleteUser(id);
-    return res.status(200).json({message: "User deleted.", success: true});
+    return res.status(200).json({ message: "User deleted.", success: true });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// get user data
+export const getUserData = async (req, res, next) => {
+  try {
+    const id = req.query.userId;
+    if (!mongoose.isValidObjectId(id)) {
+      const error = new Error("Invalid user id");
+      error.statusCode = 400; // bad request
+      throw error;
+    }
+    const user = await userService.getUserById(id);
+    return res.status(200).json({
+      message: "User found with below details.",
+      success: true,
+      user,
+    });
   } catch (error) {
     next(error);
   }

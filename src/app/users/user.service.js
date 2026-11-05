@@ -61,3 +61,15 @@ export const deleteUser = async (id) => {
   }
   return result;
 };
+
+// get user data by Id
+export const getUserById = async (id) => {
+  const user = await userRepository.findUserById(id);
+  if (!user) {
+    const error = new Error("User not found.");
+    error.statusCode = 404; // not found
+    throw error;
+  }
+  const { password, ...userWithoutPassword } = user.toObject();
+  return userWithoutPassword;
+};
