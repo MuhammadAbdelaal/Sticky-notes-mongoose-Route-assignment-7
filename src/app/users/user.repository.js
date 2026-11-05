@@ -19,3 +19,8 @@ export const createUser = async (userData) => {
 export const updateUserData = async (id, newData) => {
   return await User.updateOne({ _id: id }, newData, { runValidators: true });
 };
+
+// delete user
+export const deleteUser = async (id) => {
+  return await User.findByIdAndDelete(id);
+};

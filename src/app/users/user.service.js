@@ -11,8 +11,7 @@ export const signup = async (userData) => {
   }
 
   // if not, create a new user
-  const newUser = await userRepository.createUser(userData);
-  return newUser;
+  return await userRepository.createUser(userData);
 };
 
 // user login
@@ -50,4 +49,15 @@ export const updateUser = async (id, newData) => {
   }
 
   return await userRepository.updateUserData(id, newData);
+};
+
+// delete user
+export const deleteUser = async (id) => {
+  const result = await userRepository.deleteUser(id);
+  if (!result) {
+    const error = new Error("User not found.");
+    error.statusCode = 404; // not found
+    throw error;
+  }
+  return result;
 };

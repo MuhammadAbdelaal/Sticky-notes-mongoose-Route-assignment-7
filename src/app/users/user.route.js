@@ -11,3 +11,6 @@ userRouter.post("/login", userController.login);
 
 // Update route: PATCH /users/:id
 userRouter.patch("/:id", userController.updateUser);
+
+// Delete route: DELETE /users/:id
+userRouter.delete("/", userController.deleteUser);

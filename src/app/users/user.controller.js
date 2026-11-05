@@ -13,7 +13,7 @@ export const signup = async (req, res, next) => {
       throw error;
     }
 
-    const newUser = await userService.signup({
+   await userService.signup({
       name,
       email,
       password,
@@ -55,13 +55,13 @@ export const updateUser = async (req, res, next) => {
   try {
     const id = req.params.id;
 
-    // if id is not a vaild objectId
+    // if id is not a valid objectId
     if (!mongoose.isValidObjectId(id)) {
       const error = new Error("Invalid user id");
       error.statusCode = 400;
       throw error;
     }
-    const body = req.body || {}; // avoid undefind body errors
+    const body = req.body || {}; // avoid undefined body errors
     const allowedInputs = ["name", "email", "phone", "age"];
     const newData = {};
 
@@ -73,6 +73,22 @@ export const updateUser = async (req, res, next) => {
     }
     await userService.updateUser(id, newData);
     return res.status(200).json({ message: "User updated", success: true });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// delete user
+export const deleteUser = async (req, res, next) => {
+  try {
+    const id = req.query.userId;
+    if (!mongoose.isValidObjectId(id)) {
+      const error = new Error("Invalid user id");
+      error.statusCode = 400; // bad request
+      throw error;
+    }
+    await userService.deleteUser(id);
+    return res.status(200).json({message: "User deleted.", success: true});
   } catch (error) {
     next(error);
   }
