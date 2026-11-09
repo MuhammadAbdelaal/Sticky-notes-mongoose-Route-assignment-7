@@ -1,6 +1,7 @@
 import express from "express";
 import "./common/db/connection.js";
 import { userRouter } from "./app/users/user.route.js";
+import { noteRouter } from "./app/notes/note.route.js";
 
 const app = express();
 const PORT = 3000;
@@ -8,6 +9,7 @@ const PORT = 3000;
 app.use(express.json()); // parse req body
 
 app.use("/users", userRouter); // user routes
+app.use("/notes", noteRouter); // note routes
 
 // global error handler
 app.use((err, req, res, next) => {
