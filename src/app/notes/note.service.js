@@ -120,3 +120,18 @@ export const getOne = async (noteId, userId) => {
   // all good? return the note
   return existingNote;
 };
+
+// Get a note for user by content
+export const getByContent = async (userId, content) => {
+  // try to find the note
+  const note = await noteRepository.getNoteByContent(userId, content);
+  // check if the note exists
+  if (!note) {
+    // if not, throw error
+    const error = new Error("No note found.");
+    error.statusCode = 404; // not found
+    throw error;
+  }
+  // all good? return the note
+  return note;
+};

@@ -218,3 +218,31 @@ export const getOne = async (req, res, next) => {
     next(error);
   }
 };
+
+// get a note by its content
+export const getByContent = async (req, res, next) => {
+  try {
+    const { userId, content } = req.query;
+
+    // if id is not a valid objectId
+    if (!mongoose.isValidObjectId(userId)) {
+      const error = new Error("Invalid user id");
+      error.statusCode = 400; // bad request
+      throw error;
+    }
+
+    // content is required
+    if (!content) {
+      const error = new Error("Content is required.");
+      error.statusCode = 400; // bad request
+      throw error;
+    }
+
+    // call the service
+    const note = await noteService.getByContent(userId, content);
+    // send res and return
+    return res.status(200).json({ success: true, note });
+  } catch (error) {
+    next(error);
+  }
+};

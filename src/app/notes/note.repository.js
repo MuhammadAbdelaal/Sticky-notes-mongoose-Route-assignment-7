@@ -47,3 +47,16 @@ export const getPaginatedNotes = async (userId, skip, limit) => {
     .skip(skip)
     .limit(limit);
 };
+
+// Helper regex espacpe function
+const escapeRegex = (text) => {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+};
+
+// get a note for a user by partial content match
+export const getNoteByContent = async (userId, content) => {
+  return await Note.findOne({
+    userId,
+    content: { $regex: escapeRegex(content), $options: "i" },
+  });
+};

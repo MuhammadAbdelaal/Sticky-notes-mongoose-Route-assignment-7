@@ -21,5 +21,8 @@ noteRouter.delete("/:noteId", noteController.deleteOne);
 // Get paginated and sorted notes : GET/notes/paginate-sort
 noteRouter.get("/paginate-sort", noteController.getPaginatedNotes);
 
+// Get a note by its content : GET/notes/note-by-content
+noteRouter.get("/note-by-content", noteController.getByContent);
+
 // Get a single note : GET/notes/:noteId
 noteRouter.get("/:noteId", noteController.getOne);
