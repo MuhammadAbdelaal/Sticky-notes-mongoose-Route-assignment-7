@@ -99,3 +99,24 @@ export const getPaginatedNotes = async (userId, page, limit) => {
   // get the notes of this page
   return await noteRepository.getPaginatedNotes(userId, skip, limit);
 };
+
+// Get a single note by id
+export const getOne = async (noteId, userId) => {
+  // check if the note exists
+  const existingNote = await noteRepository.getNoteById(noteId);
+  if (!existingNote) {
+    // if not, throw error
+    const error = new Error("Note not found.");
+    error.statusCode = 404; // not found
+    throw error;
+  }
+  // check if user owns this note
+  if (existingNote.userId.toString() !== userId) {
+    // if not, throw error
+    const error = new Error("You are not the owner.");
+    error.statusCode = 403; // forbidden request
+    throw error;
+  }
+  // all good? return the note
+  return existingNote;
+};

@@ -193,3 +193,28 @@ export const getPaginatedNotes = async (req, res, next) => {
     next(error);
   }
 };
+
+// get a single note
+export const getOne = async (req, res, next) => {
+  try {
+    const noteId = req.params.noteId;
+    const userId = req.query.userId;
+
+    // if ids are not valid objectIds
+    if (
+      !mongoose.isValidObjectId(noteId) ||
+      !mongoose.isValidObjectId(userId)
+    ) {
+      const error = new Error("Invalid id formats");
+      error.statusCode = 400; // bad request
+      throw error;
+    }
+
+    // call the service
+    const note = await noteService.getOne(noteId, userId);
+    // send res and return
+    return res.status(200).json({ success: true, note });
+  } catch (error) {
+    next(error);
+  }
+};
