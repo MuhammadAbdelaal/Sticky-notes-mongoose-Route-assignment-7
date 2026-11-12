@@ -135,3 +135,28 @@ export const getByContent = async (userId, content) => {
   // all good? return the note
   return note;
 };
+
+// Get all notes for a user with user info
+export const getNotesWithUser = async (userId) => {
+  // get the notes of this user with the owner's email
+  return await noteRepository.getNotesWithUser(userId);
+};
+
+// Get notes by title for a user with user info using aggregation
+export const getNotesAggregate = async (userId, title) => {
+  return await noteRepository.getNotesAggregate(userId, title);
+};
+
+// Delete all notes for a user
+export const deleteAll = async (userId) => {
+  // try to delete all notes of this user
+  const result = await noteRepository.deleteAll(userId);
+  // check if the user had any notes
+  if (result.deletedCount === 0) {
+    // if not, throw error
+    const error = new Error("No note found.");
+    error.statusCode = 404; // not found
+    throw error;
+  }
+  return result;
+};

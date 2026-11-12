@@ -246,3 +246,73 @@ export const getByContent = async (req, res, next) => {
     next(error);
   }
 };
+
+// get all notes with user info
+export const getNotesWithUser = async (req, res, next) => {
+  try {
+    const userId = req.query.userId;
+
+    // if id is not a valid objectId
+    if (!mongoose.isValidObjectId(userId)) {
+      const error = new Error("Invalid user id");
+      error.statusCode = 400; // bad request
+      throw error;
+    }
+
+    // call the service
+    const notes = await noteService.getNotesWithUser(userId);
+    // send res and return
+    return res.status(200).json({ success: true, notes });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// get notes by title with user info using aggregation
+export const getNotesAggregate = async (req, res, next) => {
+  try {
+    const { userId, title } = req.query;
+
+    // if id is not a valid objectId
+    if (!mongoose.isValidObjectId(userId)) {
+      const error = new Error("Invalid user id");
+      error.statusCode = 400; // bad request
+      throw error;
+    }
+
+    // title is required
+    if (!title) {
+      const error = new Error("Title is required.");
+      error.statusCode = 400; // bad request
+      throw error;
+    }
+
+    // call the service
+    const notes = await noteService.getNotesAggregate(userId, title);
+    // send res and return
+    return res.status(200).json({ success: true, notes });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// delete all notes
+export const deleteAll = async (req, res, next) => {
+  try {
+    const userId = req.query.userId;
+
+    // if id is not a valid objectId
+    if (!mongoose.isValidObjectId(userId)) {
+      const error = new Error("Invalid user id");
+      error.statusCode = 400; // bad request
+      throw error;
+    }
+
+    // call the service
+    await noteService.deleteAll(userId);
+    // send res and return
+    return res.status(200).json({ message: "Deleted", success: true });
+  } catch (error) {
+    next(error);
+  }
+};

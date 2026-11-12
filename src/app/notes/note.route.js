@@ -24,5 +24,14 @@ noteRouter.get("/paginate-sort", noteController.getPaginatedNotes);
 // Get a note by its content : GET/notes/note-by-content
 noteRouter.get("/note-by-content", noteController.getByContent);
 
+// Get all notes with user info : GET/notes/note-with-user
+noteRouter.get("/note-with-user", noteController.getNotesWithUser);
+
+// Get notes by title with user info using aggregation : GET/notes/aggregate
+noteRouter.get("/aggregate", noteController.getNotesAggregate);
+
 // Get a single note : GET/notes/:noteId
 noteRouter.get("/:noteId", noteController.getOne);
+
+// Delete all notes : DELETE/notes
+noteRouter.delete("/", noteController.deleteAll);

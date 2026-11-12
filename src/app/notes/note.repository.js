@@ -1,4 +1,5 @@
 import { Note } from "./note.model.js";
+import mongoose from "mongoose";
 
 // create a single Note
 export const createOne = async (note) => {
@@ -59,4 +60,42 @@ export const getNoteByContent = async (userId, content) => {
     userId,
     content: { $regex: escapeRegex(content), $options: "i" },
   });
+};
+
+// Get all notes for a user with user info
+export const getNotesWithUser = async (userId) => {
+  return await Note.find({ userId })
+    .select({ title: 1, userId: 1, createdAt: 1 })
+    .populate("userId", { email: 1, _id: 0 });
+};
+
+// get notes by title for a user with user info
+export const getNotesAggregate = async (userId, title) => {
+  return await Note.aggregate([
+    { $match: { userId: new mongoose.Types.ObjectId(userId), title } },
+    {
+      $lookup: {
+        from: "users",
+        localField: "userId",
+        foreignField: "_id",
+        as: "user",
+      },
+    },
+    { $unwind: "$user" },
+    {
+      $project: {
+        _id: 0,
+        title: 1,
+        userId: 1,
+        createdAt: 1,
+        "user.name": 1,
+        "user.email": 1,
+      },
+    },
+  ]);
+};
+
+// delete all notes for a user
+export const deleteAll = async (userId) => {
+  return await Note.deleteMany({ userId });
 };
